@@ -3,4 +3,4 @@
 10 5 * * 0 /usr/local/bin/btrfs_backup/local_backup.sh weekly 5
 20 5 1 * * /usr/local/bin/btrfs_backup/local_backup.sh monthly 13
 30 5 1 12 * /usr/local/bin/btrfs_backup/local_backup.sh yearly 10
-0 5 * * * /usr/local/bin/btrfs_backup/all_external_backup.sh
+0 6 * * * /usr/local/bin/btrfs_backup/all_external_backup.sh
