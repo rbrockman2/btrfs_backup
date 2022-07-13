@@ -8,6 +8,12 @@ source_top_level_subvol=`dirname $1`
 source_subvol=`basename $1`
 backup_top_level_subvol="/mnt/backup"
 
+if [[ -e /dev/mapper/backup ]]; then
+    echo "Destination drive decrypted."
+else
+    echo "Error:  Destination drive not decrypted."
+    exit 1
+fi
 backup_uuid=`blkid | grep /dev/mapper/backup | cut -f 2- -d "\"" | cut -f 1 -d "\""`
 
 # Ensure both source and destination drives are mounted.
