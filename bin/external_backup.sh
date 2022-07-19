@@ -4,44 +4,49 @@ export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin/btrfs_backup"
 # number of snapshots to keep around in each directory
 keep=20
 
-source_top_level_subvol=`dirname $1`
+source_fs=`dirname $1`
 source_subvol=`basename $1`
-backup_top_level_subvol="/mnt/backup"
 
-if [[ -e /dev/mapper/backup ]]; then
-    echo "Destination drive decrypted."
+# Ensure source filesystem is mounted.
+source_label="${source_fs}/`basename ${source_fs}`.label"
+if [[ -e ${source_label} ]]; then
+    echo "Source filesystem found."
 else
-    echo "Error:  Destination drive not decrypted."
-    exit 1
-fi
-backup_uuid=`blkid | grep /dev/mapper/backup | cut -f 2- -d "\"" | cut -f 1 -d "\""`
-
-# Ensure both source and destination drives are mounted.
-if [[ -e ${source_top_level_subvol}/.source_top_level_subvol ]]; then
-    echo "Source drive found."
-    if [[ -e ${backup_top_level_subvol}/.backup_top_level_subvol ]]; then
-        echo "Destination drive found."
-    else
-        echo "Error:  Destination drive missing."
-        exit 1
-    fi
-else
-    echo "Error:  Source drive missing."
+    echo "Error:  Source filesystem missing."
     exit 1
 fi
 
-source_snapshot_dir="${source_top_level_subvol}/backup_drive_${backup_uuid}/${source_subvol}_backup"
-target_snapshot_dir="${backup_top_level_subvol}/${source_subvol}_backup"
+
+# Ensure backup filesystem is mounted.
+backup_fs=`cat ${source_label}`
+backup_label="${backup_fs}/`basename ${backup_fs}`.label"
+if [[ -e ${backup_label} ]]; then
+    echo "Backup filesystem found."
+else
+    echo "Error:  Backup filesystem missing."
+    exit 1
+fi
+
+# CAUTION:  backup filesystem full path must not have embedded spaces!
+backup_device=`mount | grep ${backup_fs} | cut -f 1 -d " "`
+backup_uuid=`blkid | grep ${backup_device} | cut -f 2- -d "\"" | cut -f 1 -d "\""`
+
+source_snapshot_dir="${source_fs}/backup_drive_${backup_uuid}/${source_subvol}_backup"
+backup_snapshot_dir="${backup_fs}/${source_subvol}_backup"
 
 mkdir -p $source_snapshot_dir
-mkdir -p $target_snapshot_dir
+mkdir -p $backup_snapshot_dir
 
 DATE="$(date '+%Y%m%d_%H:%M:%S')"
-btrfs subvol snapshot -r "${source_top_level_subvol}/${source_subvol}" "${source_snapshot_dir}/${source_subvol}.$DATE" 
+btrfs subvol snapshot -r "${source_fs}/${source_subvol}" "${source_snapshot_dir}/${source_subvol}.$DATE" 
 
-echo "Transferrring $source_snapshot_dir to $target_snapshot_dir"
-sync-subvolume-directory.sh "$source_snapshot_dir" "$target_snapshot_dir"
+echo "Transferrring $source_snapshot_dir to $backup_snapshot_dir"
+sync-subvolume-directory.sh "$source_snapshot_dir" "$backup_snapshot_dir"
+
+# Create symlink to most recent snapshot for easy restore.
+rm -f "${backup_snapshot_dir}/${source_subvol}"
+ln -s "${backup_snapshot_dir}/${source_subvol}.$DATE" "${backup_snapshot_dir}/${source_subvol}"
 
 # Delete old subvolumes AFTER successful transfer.
 delete_old_snapshots.sh $source_snapshot_dir $keep
-delete_old_snapshots.sh $target_snapshot_dir $keep
+delete_old_snapshots.sh $backup_snapshot_dir $keep
