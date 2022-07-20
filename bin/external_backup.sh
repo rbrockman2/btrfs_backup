@@ -8,7 +8,7 @@ source_fs=`dirname $1`
 source_subvol=`basename $1`
 
 # Ensure source filesystem is mounted.
-source_label="${source_fs}/`basename ${source_fs}`.label"
+source_label="${source_fs}/`basename ${source_fs}`.backup_fs_set"
 if [[ -e ${source_label} ]]; then
     echo "Source filesystem found."
 else
@@ -18,8 +18,8 @@ fi
 
 
 # Ensure backup filesystem is mounted.
-backup_fs=`cat ${source_label}`
-backup_label="${backup_fs}/`basename ${backup_fs}`.label"
+backup_fs=/mnt/backup_filesystems/`cat ${source_label}`
+backup_label="${backup_fs}/.backup_fs_set"
 if [[ -e ${backup_label} ]]; then
     echo "Backup filesystem found."
 else
@@ -31,7 +31,7 @@ fi
 backup_device=`mount | grep ${backup_fs} | cut -f 1 -d " "`
 backup_uuid=`blkid | grep ${backup_device} | cut -f 2- -d "\"" | cut -f 1 -d "\""`
 
-source_snapshot_dir="${source_fs}/backup_drive_${backup_uuid}/${source_subvol}_backup"
+source_snapshot_dir="${source_fs}/backup_fs_${backup_uuid}/${source_subvol}_backup"
 backup_snapshot_dir="${backup_fs}/${source_subvol}_backup"
 
 mkdir -p $source_snapshot_dir
