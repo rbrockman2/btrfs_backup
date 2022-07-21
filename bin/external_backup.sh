@@ -8,7 +8,7 @@ source_fs=`dirname $1`
 source_subvol=`basename $1`
 
 # Ensure source filesystem is mounted.
-source_label="${source_fs}/`basename ${source_fs}`.backup_fs_set"
+source_label="${source_fs}/backup_fs_set.`basename ${source_fs}`"
 if [[ -e ${source_label} ]]; then
     echo "Source filesystem found."
 else
@@ -19,7 +19,7 @@ fi
 
 # Ensure backup filesystem is mounted.
 backup_fs=/mnt/backup_filesystems/`cat ${source_label}`
-backup_label="${backup_fs}/.backup_fs_set"
+backup_label="${backup_fs}/backup_fs_set"
 if [[ -e ${backup_label} ]]; then
     echo "Backup filesystem found."
 else
