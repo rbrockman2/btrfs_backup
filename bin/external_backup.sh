@@ -20,17 +20,15 @@ fi
 # Ensure backup filesystem is mounted.
 backup_fs=/mnt/backup_filesystems/`cat ${source_label}`
 backup_label="${backup_fs}/backup_fs_set"
-if [[ -e ${backup_label} ]]; then
+backup_uuid_file="${backup_fs}/backup_uuid"
+if [[ -e ${backup_label} ]] && [[ -e ${backup_uuid_file} ]]; then
     echo "Backup filesystem found."
 else
     echo "Error:  Backup filesystem missing."
     exit 1
 fi
 
-# CAUTION:  backup filesystem full path must not have embedded spaces!
-backup_device=`mount | grep ${backup_fs} | cut -f 1 -d " "`
-backup_uuid=`blkid | grep ${backup_device} | cut -f 2- -d "\"" | cut -f 1 -d "\""`
-
+backup_uuid=`cat ${backup_uuid_file}`
 source_snapshot_dir="${source_fs}/backup_fs_${backup_uuid}/${source_subvol}_backup"
 backup_snapshot_dir="${backup_fs}/${source_subvol}_backup"
 

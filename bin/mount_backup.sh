@@ -18,6 +18,9 @@ do
             backup_fs_set=`cat "/mnt/backup_filesystems/${uuid}/backup_fs_set"`
             mkdir -p "/mnt/backup_filesystems/${backup_fs_set}"
             mount --bind "/mnt/backup_filesystems/${uuid}" "/mnt/backup_filesystems/${backup_fs_set}"
+
+            # Ensure backup file system has encrypted drive uuid label.
+            echo ${uuid} > "/mnt/backup_filesystems/${uuid}/backup_uuid"
         fi
     fi
 done
