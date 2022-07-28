@@ -2,13 +2,13 @@
 # Cron sometimes has the wrong path.
 export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin/btrfs_backup"
 
-# Check for master lock.
+# Check for lock.
 if [[ -e "/run/backup.lock" ]]; then
     echo "Backup already in progress, aborting."
     exit 1
 fi
 
-# Create master lock.
+# Create lock.
 touch "/run/backup.lock"
 
 source_subvol_list="/etc/btrfs_backup/source_subvol_list.txt"
@@ -21,5 +21,5 @@ done
 
 umount_backup.sh
 
-# Remove locks.
+# Remove lock.
 rm "/run/backup.lock"

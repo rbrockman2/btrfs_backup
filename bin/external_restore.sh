@@ -15,7 +15,7 @@ fi
 
 
 # Ensure backup filesystem is mounted.
-backup_fs=/mnt/backup_filesystems/`cat ${source_label}`
+backup_fs=/mnt/backup_filesystems/`cat ${target_label}`
 backup_label="${backup_fs}/backup_fs_set"
 if [[ -e ${backup_label} ]]; then
     echo "Backup filesystem found."
