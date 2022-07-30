@@ -27,4 +27,4 @@ fi
 backup_snapshot_dir="${backup_fs}/${target_subvol}_backup"
 exclude_file="${backup_snapshot_dir}/${target_subvol}/.exclude"
 
-rsync -ax --delete "${backup_snapshot_dir}/${target_subvol}/" "${target_fs}/${target_subvol}" --exclude-from=${exclude_file}
+rsync -axAXUH --delete "${backup_snapshot_dir}/${target_subvol}/" "${target_fs}/${target_subvol}" --exclude-from=${exclude_file}
