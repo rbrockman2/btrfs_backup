@@ -7,4 +7,7 @@ Install process:
   and backup set name.
 - Add the full path to the btrfs subvolumes to be backed up to 
   /etc/btrfs_backup/source_subvol_list.txt.
+- Add file backup_fs_set.[name of directory] to the directory
+  or directories containing the subvolumes to be backed up. 
+  It should contain the backup set to be used for those subvolumes.
 - Put appropriate entries into cron (see doc/sample_cron.txt).
