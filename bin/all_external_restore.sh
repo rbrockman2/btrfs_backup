@@ -4,7 +4,7 @@ export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin/btrfs_backup"
 
 # Check for lock.
 if [[ -e "/run/backup.lock" ]]; then
-    echo "Restore or backup already in progress, aborting."
+    echo "Backup operation already in progress, aborting."
     exit 1
 fi
 
