@@ -1,7 +1,7 @@
-0 4 * * * /usr/local/bin/trim.sh
 0 5 * * * /usr/local/bin/btrfs_backup/local_backup.sh daily 8
 10 5 * * 0 /usr/local/bin/btrfs_backup/local_backup.sh weekly 5
 20 5 1 * * /usr/local/bin/btrfs_backup/local_backup.sh monthly 13
 30 5 1 12 * /usr/local/bin/btrfs_backup/local_backup.sh yearly 10
 0 6 * * * /usr/local/bin/btrfs_backup/all_external_backup.sh
 0 8 2 * * /usr/local/bin/btrfs_backup/local_bitrot_check.sh
+0 8 2 * * /usr/local/bin/btrfs_backup/backup_bitrot_check.sh
