@@ -4,7 +4,6 @@ dest_pool=$2
 
 export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin/btrfs_backup"
 
-# TODO: Wonder what this does?
 shopt -s nullglob
 
 # Make destination directory on target drive
