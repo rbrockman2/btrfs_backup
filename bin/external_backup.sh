@@ -7,8 +7,8 @@ keep=20
 source_fs=`dirname $1`
 source_subvol=`basename $1`
 
-# Ensure source subvolume is mounted.
-source_label="${source_fs}/${source_subvol}/backup_fs_set"
+# Ensure source filesystem is mounted.
+source_label="${source_fs}/backup_fs_set.`basename ${source_fs}`"
 if [[ -e ${source_label} ]]; then
     echo "Source subvolume found."
 else
