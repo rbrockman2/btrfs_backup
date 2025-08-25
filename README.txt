@@ -11,3 +11,5 @@ Install process:
   top level directory of the filesystem with subvolumes to be backed up.
   The file should contain the backup set to be used for those subvolumes.
 - Put appropriate entries into cron (see doc/sample_cron.txt).
+- Add /usr/local/bin/btrfs_backup/external_drive_standby.sh to rc.local or similar.
+

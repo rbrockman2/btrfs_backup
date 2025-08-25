@@ -20,6 +20,7 @@ do
 done
 
 umount_backup.sh
+external_drive_standby.sh
 
 # Remove lock.
 rm "/run/backup.lock"
